@@ -12,7 +12,7 @@
  * @pram len: 数组的长度
  * @return void;
  */
-void INSERTION-SORT(int *A,int len)
+void INSERTION_SORT(int * A,int len)
 {
     int i, key;
     for (int j = 2; j <= len; j--)
@@ -21,11 +21,49 @@ void INSERTION-SORT(int *A,int len)
         i = j-1;
         while (A[j] < A[i] && i >= 1) // 数组从1号开始
         {
-            
+            A[i+1] = A[i];
+            i--;
         }
+    }
     return;
 }
 
+/**
+ * 主函数:测试INSERTION-SORTRT
+ */
+int main(void)
+{
+    int A[101] = {0};
+    int len;
+    
+    printf("Please input the length of the test Array (should be less then 100):");
+    scanf("%d",&len); 
+    printf("Please input %d numbers:\n",len);
+    int i = 1;
+    while (i <= len)
+    {
+        scanf("%d",&A[i]);
+        i++;
+    }
+
+    printf("Your input number is:\n");
+    i = 1;
+    while (i <= len)
+    {
+        printf("%d",A[i]);
+        i++;
+    }
+
+    INSERTION_SORT(A,len);  //sorting
+    printf("Sorted by INSERTION-SORT is:\n");
+    i = 1;
+    while (i <= len)
+    {
+        printf("%d",A[i]);
+        i++;
+    }
+    return 0;
+}
 /*************************************************************************
 	> Run Environment: CentOS 64 6.7 + Gcc 
 	> Test input:  
