@@ -6,7 +6,7 @@
 	> Created Time: Mon Mar 20 16:13:47 2017
  ************************************************************************/
 #include<stdio.h>
-int PARTITION(int *A, int low, int high);
+int PARTITION(int *pA, int low, int high);
 
 /**
  * @description: 快速排序主方法
@@ -15,13 +15,13 @@ int PARTITION(int *A, int low, int high);
  * @param: int high 排序终止位置
  * @return: void
  */
- void QUICK_SORT(int *A, int low, int high)
+ void QUICK_SORT(int *pA, int low, int high)
  {
      if (low < high)
      {
-         int pos = PARTITION(A,low,high);
-         QUICK_SORT(A,low,pos-1);  
-         QUICK_SORT(A,pos+1,high);
+         int pos = PARTITION(pA,low,high);
+         QUICK_SORT(pA,low,pos-1);  
+         QUICK_SORT(pA,pos+1,high);
      }
      return;
  }
@@ -29,47 +29,33 @@ int PARTITION(int *A, int low, int high);
 
 /**
  * @Description: 快速排序的核心方法，找出一个位置pos使得pos左侧全部小于等于A[pos],右侧全部大于等于A[pos]
- * @param: int * A 待排序数组的地址
+ * @param: int * pA 待排序数组的地址
  * @param: int low 排序起始位置
  * @param: int high 排序终止位置
  * @return: int pos 返回一位置
  */
-int PARTITION(int *A, int low, int high)
-{
-    int tmp = A[high];
-    int i = low - 1; //i的起始位置要在low前一位
-    int j;
+ int PARTITION(int *pA, int low, int high)
+ {
+     int tmp = pA[low];
+     while(low != high)
+     {
+         while (low < high && pA[high] >= tmp)
+            high--;
+         pA[low] = pA[high];
+         while (low < high && pA[low] <= tmp)
+            low++;
+         pA[high] = pA[low];
+     }
 
-    for (j = low; j <= high-1; j++ )
-    {
-        if (A[j] <= tmp)
-        {
-            i++;
-            //坑：要交换的两个数如果指向同一片存储区域那么省略交换步骤
-            //交换A[i]与A[j]
-            if (i != j)
-            {
-                A[i] ^= A[j];
-                A[j] ^= A[i];
-                A[i] ^= A[j];
-            }
-        }
-    }
-    // for循环结束后第A[i]的值实际上是大于tmp的，因此需要与tmp交换
-    if (high != i+1)
-    {
-        A[high] ^= A[i+1];
-        A[i+1] ^= A[high];
-        A[high] ^= A[i+1];
-    }
-    
-    return i+1;    
-}
+     pA[low] = tmp;
+     return low;     //low or high are available;
+ }
 
 //---------------------------数测试快速排序----------------------------//
  int main(void)
  {
      int A[101] = {0};
+     int * pA = &A[0];
      
      // data input
      printf("Please input 10 integral numbers for a test: \n");
@@ -89,7 +75,7 @@ int PARTITION(int *A, int low, int high)
         i++;
      }
 
-     QUICK_SORT(A,1,10); //数组名作函数参数相当于传递指针
+     QUICK_SORT(pA,1,10);
 
      printf("\nThe sorting results is: \n");
      i = 1;
